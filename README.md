@@ -1,6 +1,8 @@
 # kobeau-reader
 
-Simple, one-liner installer of [KOReader][koreader] on a Kobo device powered by [Nix][nix].
+Simple, one-liner installer of [KOReader][koreader] on a Kobo device powered by
+[Nix][nix]. Note that each time you'll update the official OS of your Kobo,
+you'll have to reinstall KOReader this way.
 
 **Disclaimer**: I am not the original author of the install script packaged
 here. It is taken from [A mobile read thread][forum-thread], where it's made
