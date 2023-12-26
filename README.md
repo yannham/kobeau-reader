@@ -54,9 +54,9 @@ If you update successfully, consider upstreaming your change to this repository!
 
 ## Usage
 
-The main pacakge of this flake downloads the install script and a
-archive[^version] of the one-click install package for KOReader on Kobo and put
-them in the same directory. Using `nix run` will start the script.
+The main pacakge of this flake downloads the install script and a archive of the
+one-click install package for KOReader on Kobo and put them in the same
+directory. Using `nix run` will start the script.
 
 ```console
 $ nix run github:yannham/kobeau-reader
