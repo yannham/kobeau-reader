@@ -1,16 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
-    ocp-koreader-kobo = {
-      url = "https://storage.gra.cloud.ovh.net/v1/AUTH_2ac4bfee353948ec8ea7fd1710574097/kfmon-pub/OCP-KOReader-v2023.10.zip";
-      flake = false;
-    };
   };
 
   description = "Download and install KOReader on a Kobo device.";
 
-  outputs = { self, nixpkgs, flake-utils, stdenv }:
+  outputs = { self, nixpkgs, flake-utils }:
     let
       SYSTEMS = [ "x86_64-linux" ];
     in
@@ -22,18 +18,44 @@
       in
       rec {
         packages = {
-          kobeau-reader = stdenv.mkDerivation {
-            name = "kobeau-reader";
-            src = ./install.sh;
-            phases = ["installPhase"];
+          ocp-koreader-kobo = pkgs.stdenv.mkDerivation {
+            name = "ocp-koreader-kobo";
+            src = pkgs.fetchurl {
+              url =
+                "https://storage.gra.cloud.ovh.net/v1/AUTH_2ac4bfee353948ec8ea7fd1710574097/kfmon-pub/OCP-KOReader-v2023.10.zip";
+              sha256 = "sha256-/gc0x5CgwoMBjXvwTSbdl+2j38NhCjpH5GsvXApCDig=";
+            };
+
+            # We don't want Nix to try to unpack this zip file, as the script
+            # expects it to stay unextracted.
+            dontUnpack = true;
+
             installPhase = ''
-              mkdir -p $out/bin
-              cp -r $src/* $out/bin
-              cp -r \${ocp-koreader-kobo}/KOReader $out/bin
+              mkdir -p $out
+              cp  $src $out/ocp-koreader-kobo.zip
             '';
           };
+
+          kobeau-reader = pkgs.stdenv.mkDerivation {
+            name = "kobeau-reader";
+            src = ./install.sh;
+            phases = [ "installPhase" ];
+            installPhase = ''
+              mkdir -p $out/bin
+              cp  $src $out/bin/install.sh
+              chmod +x $out/bin/install.sh
+
+              # The install script requires the OCP-KOReader-vXXXX.XX.zip file
+              # to be located in the same directory as the script
+              ln -s ${packages.ocp-koreader-kobo}/ocp-koreader-kobo.zip $out/bin/ocp-koreader-kobo.zip
+            '';
+
+            meta.mainProgram = "install.sh";
+          };
+
           default = packages.kobeau-reader;
         };
+
         apps.default = {
           type = "app";
           program = pkgs.lib.getExe packages.kobeau-reader;
