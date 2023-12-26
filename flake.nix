@@ -32,7 +32,9 @@
 
             installPhase = ''
               mkdir -p $out
-              cp  $src $out/ocp-koreader-kobo.zip
+              # Remove the heading store hash from the file name as the install
+              # script relies a file name format
+              cp  $src $out/''${src#*-}
             '';
           };
 
@@ -47,7 +49,7 @@
 
               # The install script requires the OCP-KOReader-vXXXX.XX.zip file
               # to be located in the same directory as the script
-              ln -s ${packages.ocp-koreader-kobo}/ocp-koreader-kobo.zip $out/bin/ocp-koreader-kobo.zip
+              ln -s ${packages.ocp-koreader-kobo}/* $out/bin/
             '';
 
             meta.mainProgram = "install.sh";
