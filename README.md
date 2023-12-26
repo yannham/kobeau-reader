@@ -1,6 +1,6 @@
 # kobeau-reader
 
-Simple, one-liner installer of KOReader on a Kobo device powered by Nix.
+Simple, one-liner installer of [KOReader][koreader] on a Kobo device powered by [Nix][nix].
 
 **Disclaimer**: I am not the original author of the install script packaged
 here. It is taken from [A mobile read thread][forum-thread], where it's made
@@ -67,3 +67,5 @@ Simply follows the script's inscructions from there. After the update, **safely
 eject your Kobo before unplugging**, watch it process and reboot.
 
 [forum-thread]: https://www.mobileread.com/forums/showthread.php?t=314220
+[koreader]: https://github.com/koreader/koreader
+[nix]: https://nixos.org/
